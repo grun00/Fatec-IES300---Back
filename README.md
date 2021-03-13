@@ -3,19 +3,19 @@
 Repositorio com o codigo do backend do projeto de IES300 da Fatec
 
 # Instalando Dependências
-```sh 
+```sh
 > npm install
 ```
 
 # Rodando o servidor em live reload (desenvolvimento)
 
-```sh 
+```sh
 > npm run dev
 ```
 
 # Rodando o servidor (produção)
 
-```sh 
+```sh
 > npm start
 ```
 
