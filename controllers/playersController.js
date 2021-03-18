@@ -1,5 +1,5 @@
 const {ObjectID} = require("mongodb")
-const { listAll, updateOne, deleteOne, findDocuments, findOne } = require("../common/database/db")
+const { listAll, updateOne, deleteOne, findDocuments, findOne, insertOne } = require("../common/database/db")
 const collection = "players"
 
 exports.listPlayers = async (req, res) => {
@@ -49,5 +49,16 @@ exports.findPlayers = async (req, res) => {
         res.send(result)
     } catch (error) {
         res.status(400).send({message: error.message })
+    }
+}
+
+exports.insertPlayer = async (req, res) => {
+    try{
+        
+        result = await insertOne(req.database, collection, req.body)
+        
+        res.send(result)
+    }catch(error){
+        res.status(401).send({message: error.message})
     }
 }
