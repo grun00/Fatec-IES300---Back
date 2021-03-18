@@ -109,6 +109,24 @@ const findDocuments = async (database, collection, query) => {
         return result
     }
 }
+const insertOne = async (database, collection, data) => {
+    let client;
+    let result;
+
+    try{
+        client = await getConnection(uri)
+        cursor = await client.db(database).collection(collection);
+        await cursor.insertOne(data)
+        result = {message: "Document inserted"}
+    }catch{
+        console.log(`Error: ${error.message}`)
+        result = {message: "Operation failed",
+    error: error.message }
+    }finally{
+        client ? client.close() : null
+        return result
+    }
+}
 
 
 module.exports = {
@@ -116,5 +134,6 @@ module.exports = {
     updateOne,
     deleteOne,
     findOne,
-    findDocuments
+    findDocuments,
+    insertOne
 }
