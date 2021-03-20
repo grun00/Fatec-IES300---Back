@@ -1,5 +1,4 @@
 require("dotenv/config")
-const { query } = require("express")
 const {getConnection} = require("../../services/mongodb/connection")
 const dbUser = process.env.DATABASE_USER
 const dbPassword = process.env.DATABASE_PASSWORD
