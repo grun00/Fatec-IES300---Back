@@ -1,11 +1,15 @@
 const {ObjectID} = require("mongodb")
-const { listAll,  findDocuments, findOne } = require("../common/database/db")
+const { listAll, findOne , findRandom } = require("../common/database/db")
 const collection = "questions"
 
 exports.listQuestions = async (req, res) => {
     try {
+        if( req.query.random=="true"){
+            this.findQuestionRandom(req,res)
+        }else{
         result = await listAll(req.database, collection)
         res.send(result)
+        }
     } catch (error) {
         res.status(400).send({message: error.message })
     }
@@ -22,9 +26,10 @@ exports.findOneQuestionByID = async (req, res) => {
     }
 }
 
-exports.findQuestions = async (req, res) => {
+
+exports.findQuestionRandom = async (req, res) => {
     try {
-        result = await findDocuments(req.database, collection, req.body)
+        result = await findRandom(req.database, collection, req.query)
         res.send(result)
     } catch (error) {
         res.status(400).send({message: error.message })
