@@ -128,6 +128,34 @@ const insertOne = async (database, collection, data) => {
     }
 }
 
+const findRandom = async (database, collection, query) => {
+
+    let client;
+    let result;
+    try {
+        
+        client = await getConnection(uri)
+        cursor = await client.db(database).collection(collection);
+
+        query = {"category": query.category, "difficulty": parseInt(query.difficulty,10)}
+
+        let max = await cursor.count(query)
+    
+        result = await cursor.find(query).limit(-1).skip(Math.floor(Math.random() * max)).next()
+               
+    } catch (error) {
+        console.log(`Error: ${error.message}`)
+        result = {message: "Operation failed",
+    error: error.message }
+    } finally {
+        client ? client.close() : null
+        return result
+    }
+
+
+    
+}
+
 
 module.exports = {
     listAll, 
@@ -135,5 +163,6 @@ module.exports = {
     deleteOne,
     findOne,
     findDocuments,
-    insertOne
+    insertOne,
+    findRandom
 }
