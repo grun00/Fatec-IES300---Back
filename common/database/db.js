@@ -99,7 +99,7 @@ const findDocuments = async (database, collection, query) => {
     try {
         client = await getConnection(uri)
         cursor = await client.db(database).collection(collection);
-        result = await cursor.find(query)
+        result = await cursor.find(query).toArray()
     } catch (error) {
         console.log(`Error: ${error.message}`)
         result = {message: "Operation failed",

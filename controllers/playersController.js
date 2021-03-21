@@ -4,8 +4,12 @@ const collection = "players"
 
 exports.listPlayers = async (req, res) => {
     try {
+        if(req.query!=null){
+            this.findPlayers(req,res)
+        }else{
         result = await listAll(req.database, collection)
         res.send(result)
+        }
     } catch (error) {
         res.status(400).send({message: error.message })
     }
@@ -45,7 +49,7 @@ exports.findOnePlayerByID = async (req, res) => {
 
 exports.findPlayers = async (req, res) => {
     try {
-        result = await findDocuments(req.database, collection, req.body)
+        result = await findDocuments(req.database, collection, req.query)
         res.send(result)
     } catch (error) {
         res.status(400).send({message: error.message })
