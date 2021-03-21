@@ -54,3 +54,10 @@ Endereço do serviço: http://localhost:5000/players/:id
 Exemplo de json : {   "name": "Tiago",   "netWorth": "111111111",  "email": "thiago@gmail.com",  "password": "123456"
 }
 
+                                     Pesquisa player por parametros
+
+Método: GET
+
+Exemplo: http://localhost:5000/players?email=thiago@gmail.com
+
+
