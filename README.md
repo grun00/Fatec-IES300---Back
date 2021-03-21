@@ -32,7 +32,7 @@ Método: POST
 
 Endereço do serviço: http://localhost:5000/players
 
-Exemplo de json: {"name":"Thiago","netWorth":300000000,"email":"thiago@gmail.com","password":"123456"}
+Exemplo de json: {"name":"Thiago","netWorth":"300000000","email":"thiago@gmail.com","password":"123456"}
 
                                      Retorna um question aleatória
 A question retornada é selecionada aleatóriamente no banco de dados e é de acordo com a category e difficulty informados.
@@ -42,3 +42,15 @@ Método: GET
 Endereço do serviço: http://localhost:5000/questions
 
 Exemplo: http://localhost:5000/questions?category=TI&difficulty=0&random=true
+
+
+                                      Atualiza dados de um player
+Não é necessário passar todos os dados do player. Só os dados que quer atualizar.
+
+Método: PATCH
+
+Endereço do serviço: http://localhost:5000/players/:id
+
+Exemplo de json : {   "name": "Tiago",   "netWorth": "111111111",  "email": "thiago@gmail.com",  "password": "123456"
+}
+
