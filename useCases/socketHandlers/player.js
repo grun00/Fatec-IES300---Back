@@ -33,6 +33,7 @@ const newPlayer = (socketServer, player) => {
 
 const disconnect = (socketServer) => {
     return new Promise (  async (resolve, reject) =>  {
+        if(!socketServer.info.onlinePlayers[socketServer.socket.name]) return reject("Player doesn't exist")
         try {
             await leaveRoom(socketServer, socketServer.socket.currentRoom, leaveAll=true)
         } catch (error) {
@@ -42,7 +43,7 @@ const disconnect = (socketServer) => {
         delete socketServer.info.onlinePlayers[socketServer.socket.name];
         console.log(`${socketServer.socket.name} has disconnected.`)
         console.log(socketServer.info)
-        socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers)
+        return resolve(socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers))
     })
 
 }

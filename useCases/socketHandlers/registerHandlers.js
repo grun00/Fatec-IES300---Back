@@ -13,6 +13,6 @@ module.exports= (socketServer) => {
     // Room handlers
     socketServer.socket.on("createRoom", async roomName => await roomHandler.createRoom(socketServer, roomName));
     socketServer.socket.on("joinRoom", async roomName => await roomHandler.joinRoom(socketServer, roomName));
-    socketServer.socket.on("leaveRoom", async roomName=> await roomHandler.joinRoom(socketServer, roomName));
+    socketServer.socket.on("leaveRoom", async roomName=> await roomHandler.leaveRoom(socketServer, roomName));
     socketServer.socket.on("deleteRoom", async roomName=> await roomHandler.deleteRoom(socketServer, roomName));
 }

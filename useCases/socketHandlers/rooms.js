@@ -19,13 +19,13 @@ const leaveRoom = (socketServer, roomName, leaveAll=false) => {
     return new Promise( async (resolve, reject) => {
         if(!Object.keys(socketServer.info.channels).includes(roomName)) return reject(`${roomName} doesn't exist.`);
         if(!socketServer.info.channels[roomName].includes(socketServer.socket.name)) {
+            console.log(socketServer.info.channels[roomName].includes(socketServer.socket.name))
             console.log(`Player ${socketServer.socket.info} not in ${roomName}`, socketServer.info.channels);
             return reject(`${socketServer.socket.name} is not in ${roomName}.`);    
         }
         socketServer.info.channels[roomName] = socketServer.info.channels[roomName].filter(item => item !== socketServer.socket.name);
         if(!leaveAll) {
             try {
-                console.log("leaveAll", leaveAll)
                 console.log("currentRoom", socketServer.socket.currentRoom)
                 await joinRoom(socketServer, 'General')
             } catch (error) {
@@ -45,7 +45,7 @@ const leaveRoom = (socketServer, roomName, leaveAll=false) => {
 const joinRoom = (socketServer, roomName) => {
     return new Promise(async (resolve, reject) => {
         if (!Object.keys(socketServer.info.channels).includes(roomName)) return  reject(`${roomName} doesn't exist.`)
-        if (socketServer.socket.currentRoom) {
+        if (socketServer.socket.currentRoom !== "General") {
             try {
                 await leaveRoom(socketServer, socketServer.socket.currentRoom);
             } catch (error) {
@@ -53,7 +53,7 @@ const joinRoom = (socketServer, roomName) => {
                 return reject(error)
             }
         }
-        socketServer.socket.join(roomName);
+        await socketServer.socket.join(roomName);
         socketServer.info.channels[roomName].push(socketServer.socket.name);
         socketServer.socket.currentRoom = roomName 
         socketServer.socket.emit("joinedRoom", socketServer.info.channels);
