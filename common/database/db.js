@@ -1,4 +1,5 @@
 require("dotenv/config")
+const { query } = require("express")
 const {getConnection} = require("../../services/mongodb/connection")
 const dbUser = process.env.DATABASE_USER
 const dbPassword = process.env.DATABASE_PASSWORD
@@ -128,7 +129,7 @@ const insertOne = async (database, collection, data) => {
     }
 }
 
-const findRandom = async (database, collection, query) => {
+const findRandom = async (database, collection, difficulty, quantity, category) => {
 
     let client;
     let result;
@@ -137,12 +138,13 @@ const findRandom = async (database, collection, query) => {
         client = await getConnection(uri)
         cursor = await client.db(database).collection(collection);
 
-        query = {"category": query.category, "difficulty": parseInt(query.difficulty,10)}
+        let query = { "difficulty": difficulty , "category": category}
 
-        let max = await cursor.count(query)
-    
-        result = await cursor.find(query).limit(-1).skip(Math.floor(Math.random() * max)).next()
-               
+        if( category == null)
+            delete query.category
+
+        result = await cursor.aggregate( [ { $match: query },{$sample: {size:parseInt(quantity,10)}}]).toArray()
+
     } catch (error) {
         console.log(`Error: ${error.message}`)
         result = {message: "Operation failed",

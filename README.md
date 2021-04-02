@@ -25,23 +25,23 @@ Obrigado aos membros do grupo.
 
 # Endpoints 
 
-                                        Cria player
-Para criar um player, enviar um json conforme o exemplo abaixo:
-
-Método: POST
-
-Endereço do serviço: http://localhost:5000/players
-
-Exemplo de json: {"name":"Thiago","netWorth":"300000000","email":"thiago@gmail.com","password":"123456"}
-
+                                     
                                      Retorna um question aleatória
 A question retornada é selecionada aleatóriamente no banco de dados e é de acordo com a category e difficulty informados.
 
 Método: GET
 
-Endereço do serviço: http://localhost:5000/questions
 
-Exemplo: http://localhost:5000/questions?category=TI&difficulty=0&random=true
+Exemplo: http://localhost:5000/questions?search=random&category=TI&difficulty=1
+
+
+                                    Retorna varias perguntas aleatórias
+
+De acordo com a quantidade desejada para cada nivel.
+
+Método: GET
+
+Exemplo: http://localhost:5000/questions?search=match&nivel1=5&nivel2=5&nivel3=5&nivel4=1
 
 
                                       Atualiza dados de um player
@@ -59,5 +59,19 @@ Exemplo de json : {   "name": "Tiago",   "netWorth": "111111111",  "email": "thi
 Método: GET
 
 Exemplo: http://localhost:5000/players?email=thiago@gmail.com
+
+                                     Cria player
+Para criar um player, enviar um json conforme o exemplo abaixo:
+
+Método: POST
+
+Endereço do serviço: http://localhost:5000/players
+
+Exemplo de json: {"name":"Thiago","netWorth":"300000000","email":"thiago@gmail.com","password":"123456"}
+
+
+
+
+
 
 
