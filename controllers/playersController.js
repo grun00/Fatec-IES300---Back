@@ -47,6 +47,16 @@ exports.findOnePlayerByID = async (req, res) => {
     }
 }
 
+exports.findPlayerByUsername = async (req, res) => {
+    const {username} = req.params
+  console.log(username)
+    try {
+        result = await findOne(req.database, collection, {username:  username})
+        res.send(result)
+    } catch (error) {
+        res.status(400).send({message: error.message }) }
+}
+
 exports.findPlayers = async (req, res) => {
     try {
         result = await findDocuments(req.database, collection, req.query)
@@ -58,11 +68,20 @@ exports.findPlayers = async (req, res) => {
 
 exports.insertPlayer = async (req, res) => {
     try{
-        
         result = await insertOne(req.database, collection, req.body)
-        
         res.send(result)
     }catch(error){
         res.status(401).send({message: error.message})
+    }
+}
+
+exports.loginPlayer = async (req, res) => {
+    const query = { email: req.body.email, password: req.body.password }
+
+    try {
+      result = await findOne(req.database, collection, query);
+      res.send(result);
+    }catch(error) {
+        res.status(401).send({message: error.message});
     }
 }

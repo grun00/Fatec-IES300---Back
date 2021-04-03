@@ -14,10 +14,14 @@ router.patch("/:id", playersController.updatePlayerByID)
 // Delete Player by ID
 router.delete("/:id", playersController.deletePlayerByID)
 
-// Find Players
+// Find Players by username
+router.get("/by_username/:username", playersController.findPlayerByUsername)
 
-// Create Player 
+// Create Player
 router.post("/", playersController.insertPlayer)
+
+// Logins the Player
+router.post("/login", playersController.loginPlayer)
 
 
 
