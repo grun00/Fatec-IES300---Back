@@ -16,6 +16,9 @@ router.delete("/:id", playersController.deletePlayerByID)
 
 // Find Players
 
+// Create Player 
+router.post("/", playersController.insertPlayer)
+
 
 
 module.exports = router

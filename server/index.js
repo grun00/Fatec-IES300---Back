@@ -3,6 +3,7 @@ const cors = require('cors');
 const http = require('http');
 const {createSocket} = require("../services/socket/socketConfig")
 const playersRouter = require("../routes/players-routes") 
+const questionsRouter = require("../routes/questions-routes") ;
 
 const app = express();
 const PORT = 5000;
@@ -23,7 +24,10 @@ createSocket(server)
 
 
 // Routes
-app.use("/players", playersRouter)
+app.use("/players", playersRouter);
+
+app.use("/questions", questionsRouter);
+
 
 // app.get('/', (req, res) => {
 //     res.send(JSON.stringify({ message: 'server online' }))
