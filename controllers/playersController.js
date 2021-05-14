@@ -123,10 +123,10 @@ exports.buyItems = async (req, res) => {
                 res.send('ID do Item ou ID do usuário não encontrado(s).')
             }
             
-            allPromises.push(findOne(req.database, collection, {_id:  ObjectID(id)}))
+            //allPromises.push(findOne(req.database, collection, {_id:  ObjectID(id)}))
             return Promise.all(allPromises)
             .then(resp => {
-                console.log(resp)
+                //console.log(resp)
                 const item = resp[0]
                 const player = resp[1]
                 if((item.value * data.quantity) < player.money) {
