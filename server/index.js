@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const playersRouter = require("../routes/players-routes");
 const questionsRouter = require("../routes/questions-routes") ;
+const itemsRouter = require('../routes/items-router')
 
 const app = express();
 const PORT = 5000;
@@ -20,6 +21,7 @@ app.use("/players", playersRouter);
 
 app.use("/questions", questionsRouter);
 
+app.use("/items", itemsRouter);
 
 // app.get('/', (req, res) => {
 //     res.send(JSON.stringify({ message: 'server online' }))
