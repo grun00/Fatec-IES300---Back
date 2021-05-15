@@ -12,23 +12,14 @@ const getServerInfo = (socketServer) => {
 
 
 const newPlayer = (socketServer, player) => {
-    return new Promise( async (resolve, reject) => {
         // Register player information onto the socket
         socketServer.info.onlinePlayers[player.name] = socketServer.socket.id;
         socketServer.socket.name = player.name;
         // Force player to join the General room (for testing)
-        try {
-            await joinRoom(socketServer, roomName='General');
-        } catch (error) {
-            console.log(error)
-            return reject(error)
-        }
         // Alert all users that a new player as joined
-        socketServer.io.emit("playerCreated", `${player.name} created.`);
+        socketServer.io.emit("playerCreaed", `${player.name} created.`);
         socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers);
-        return resolve(socketServer.info.onlinePlayers)
-    })
-    
+    return socketServer.info.onlinePlayers
 }
 
 const disconnect = (socketServer) => {
