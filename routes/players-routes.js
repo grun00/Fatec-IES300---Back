@@ -24,5 +24,4 @@ router.post("/", playersController.insertPlayer)
 router.post("/login", playersController.loginPlayer)
 
 
-
 module.exports = router
