@@ -6,37 +6,37 @@ const getOnlinePlayers = (socketServer) => {
 
 const getServerInfo = (socketServer) => {
     socketServer.io.emit("serverInfo", socketServer.info)
-    console.log(socketServer.info)
     return socketServer.info
 }
 
 
 const newPlayer = (socketServer, player) => {
         // Register player information onto the socket
-        socketServer.info.onlinePlayers[player.name] = socketServer.socket.id;
+        socketServer.info.onlinePlayers[player.name] = {...player, socketId: socketServer.socket.id};
         socketServer.socket.name = player.name;
+        socketServer.socket.player = player;
         // Force player to join the General room (for testing)
         // Alert all users that a new player as joined
-        socketServer.io.emit("playerCreaed", `${player.name} created.`);
+        socketServer.io.emit("playerCreated", `${player.name} created.`);
         socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers);
     return socketServer.info.onlinePlayers
 }
 
 const disconnect = (socketServer) => {
-    return new Promise (  async (resolve, reject) =>  {
-        if(!socketServer.info.onlinePlayers[socketServer.socket.name]) return reject("Player doesn't exist")
+        if(!socketServer.info.onlinePlayers[socketServer.socket.name]) {
+            console.log("Player doesn't exist")
+            return false;
+        } 
         try {
-            await leaveRoom(socketServer, socketServer.socket.currentRoom, leaveAll=true)
+            leaveRoom(socketServer, socketServer.socket.currentRoom, leaveAll=true)
         } catch (error) {
             console.log(error)
-            return reject(error)
+            return false;
         }
         delete socketServer.info.onlinePlayers[socketServer.socket.name];
         console.log(`${socketServer.socket.name} has disconnected.`)
-        console.log(socketServer.info)
-        return resolve(socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers))
-    })
-
+        socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers)
+        return true;
 }
 
 

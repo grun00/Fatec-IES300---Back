@@ -12,7 +12,7 @@ const configs = {
     cors:{
         origins: '*',
         methods : ["GET", "POST"],
-        credentials: true,
+        credentials: false,
     }
 }
 
