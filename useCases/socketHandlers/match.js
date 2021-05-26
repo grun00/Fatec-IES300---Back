@@ -6,7 +6,13 @@ const collection = 'questions';
 const randomizeAlternatives = (question) => {
     if(question.alternatives && question.answer){
         const matchAlternatives = _.shuffle([...question.alternatives, question.answer]);
-        return matchAlternatives;
+        const answerIndex = [];
+        matchAlternatives.forEach((element, index) => {
+            if(element === question.answer) { 
+                answerIndex.push(index)
+            }
+        });
+        return {matchAlternatives, answerIndex: answerIndex[0]};
     }
     return null;
 }
@@ -18,8 +24,11 @@ const prepareMatch = async (database, collection, quantity) => {
     const lvl4 = await findRandom(database, collection, 4, 1, null)
     const questions = [...lvl1, ...lvl2, ...lvl3, ...lvl4]
     for(let question of questions){
-        question.randomAlternatives = randomizeAlternatives(question)
+         const {matchAlternatives, answerIndex} = randomizeAlternatives(question)
+        question.randomAlternatives = matchAlternatives
+        question.answerIndex = answerIndex
     }
+    console.log(questions[0])
     return questions
 }
 
