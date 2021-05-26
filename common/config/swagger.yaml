@@ -31,6 +31,10 @@ paths:
                   netWorth: '80000000'
                   email: silvio@abrav.com
                   password: '2k44lWtKas'
+                  backpack: 
+                    items:
+                      item_id: "609eadb69fc12b2ee4553795"
+                      quantity: 5
     post:
       tags:
         - players
@@ -61,7 +65,7 @@ paths:
         - name: _id
           in: path
           required: true
-          description: identificação única do usuário
+          description: identificação única do Player.
           schema:
             type: string
             minimum: 1
@@ -79,7 +83,7 @@ paths:
         - name: _id
           in: path
           required: true
-          description: identificação única do usuário
+          description: identificação única do Player.
           schema:
             type: string
             minimum: 1
@@ -104,7 +108,7 @@ paths:
         - name: _id
           in: path
           required: true
-          description: identificação única do usuário
+          description: identificação única do Player.
           schema:
             type: string
             minimum: 1
@@ -117,14 +121,14 @@ paths:
 
   /players/username/{name}:
     get:
-      summary: Retorna um único Player utilizando o name
+      summary: Retorna um único Player utilizando o name.
       tags:
         - players
       parameters:
         - name: name
           in: path
           required: true
-          description: nome do usuário
+          description: nome do Player.
           schema:
             type: string
             minimum: 1
@@ -137,15 +141,88 @@ paths:
 
   /questions:
     get:
-      summary: Retorna a uma lista de perguntas.
+      summary: Retorna a uma lista de Questions cadastradas.
       tags:
-        - perguntas
+        - questions 
       responses:
         '200': 
+          description: um JSON com todas as Question cadastradas.
           content:
             applications/json:
               schema:
                 $ref: '#/components/schemas/Question' 
+    post:
+      tags: 
+        - questions
+      summary: Cria uma Question.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionUpdate'
+
+  /questions/{_id}:
+    get:
+      tags:
+        - questions 
+      summary: Retorna uma única Question utilizando _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+    patch:
+      tags:
+        - questions
+      summary: Atualiza uma única Question utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/QuestionUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+    delete:
+      tags:
+        - questions 
+      summary: Deleta uma única Question utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
 
 components:
   schemas:
@@ -167,6 +244,17 @@ components:
           type: string
         password:
           type: string
+        money:
+          type: integer
+        backpack:
+          type: array
+          items:
+            type: object
+            properties:
+              item_id:
+                type: string
+              quantity:
+                type: integer
     PlayerUpdate:
       type: object
       properties:
@@ -178,6 +266,17 @@ components:
           type: string
         password:
           type: string
+        money:
+          type: integer
+        backpack:
+          type: array
+          items:
+            type: object
+            properties:
+              item_id:
+                type: string
+              quantity:
+                type: integer
     Question:
       type: object
       properties:
@@ -187,10 +286,31 @@ components:
         type: string
        alternatives:
         type: array
-        min: 4
+        items:
+          type: string
+        minItems: 4
+        maxItems: 4
        answer: 
         type: string
        category:
         type: string
        difficulty:
-        type: int
+        type: integer
+    QuestionUpdate:
+      type: object
+      properties:
+       question:
+        type: string
+       alternatives:
+        type: array
+        items:
+          type: string
+        minItems: 4
+        maxItems: 4
+       answer: 
+        type: string
+       category:
+        type: string
+       difficulty:
+        type: integer
+
