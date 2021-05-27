@@ -68,6 +68,12 @@ exports.findPlayers = async (req, res) => {
 
 exports.insertPlayer = async (req, res) => {
     try{
+        var d = new Date();
+        var dia = d.getDate()
+        var mes = d.getMonth()+1
+        var ano = d.getFullYear()
+        
+        req.body["dt_criacao"]=dia+'/'+mes+'/'+ano
         result = await insertOne(req.database, collection, req.body)
         res.send(result)
     }catch(error){
