@@ -1,4 +1,5 @@
 require("dotenv/config")
+const { query } = require("express")
 const {getConnection} = require("../../services/mongodb/connection")
 const dbUser = process.env.DATABASE_USER
 const dbPassword = process.env.DATABASE_PASSWORD
@@ -99,7 +100,7 @@ const findDocuments = async (database, collection, query) => {
     try {
         client = await getConnection(uri)
         cursor = await client.db(database).collection(collection);
-        result = await cursor.find(query)
+        result = await cursor.find(query).toArray()
     } catch (error) {
         console.log(`Error: ${error.message}`)
         result = {message: "Operation failed",
@@ -109,6 +110,53 @@ const findDocuments = async (database, collection, query) => {
         return result
     }
 }
+const insertOne = async (database, collection, data) => {
+    let client;
+    let result;
+
+    try{
+        client = await getConnection(uri)
+        cursor = await client.db(database).collection(collection);
+        await cursor.insertOne(data)
+        result = {message: "Document inserted"}
+    }catch{
+        console.log(`Error: ${error.message}`)
+        result = {message: "Operation failed",
+    error: error.message }
+    }finally{
+        client ? client.close() : null
+        return result
+    }
+}
+
+const findRandom = async (database, collection, difficulty, quantity, category) => {
+
+    let client;
+    let result;
+    try {
+        
+        client = await getConnection(uri)
+        cursor = await client.db(database).collection(collection);
+
+        let query = { "difficulty": difficulty , "category": category}
+
+        if( category == null)
+            delete query.category
+
+        result = await cursor.aggregate( [ { $match: query },{$sample: {size:parseInt(quantity,10)}}]).toArray()
+
+    } catch (error) {
+        console.log(`Error: ${error.message}`)
+        result = {message: "Operation failed",
+    error: error.message }
+    } finally {
+        client ? client.close() : null
+        return result
+    }
+
+
+    
+}
 
 
 module.exports = {
@@ -116,5 +164,7 @@ module.exports = {
     updateOne,
     deleteOne,
     findOne,
-    findDocuments
+    findDocuments,
+    insertOne,
+    findRandom
 }

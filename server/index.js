@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
+const swaggerRouter = require("../routes/swagger-routes");
 const playersRouter = require("../routes/players-routes");
 const questionsRouter = require("../routes/questions-routes") ;
 
@@ -17,7 +18,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/players", playersRouter);
-
+app.use("/docs", swaggerRouter)
 app.use("/questions", questionsRouter);
 
 

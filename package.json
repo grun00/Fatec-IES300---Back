@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server/index.js",
-    "dev": "nodemon run ./server/index.js"
+    "dev": "nodemon run ./server/index.js",
+    "create-docs": "node ./common/config/swagger-auto.js"
   },
   "repository": {
     "type": "git",
@@ -23,11 +24,15 @@
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.4",
-    "socket.io": "^4.0.0"
+    "socket.io": "^4.0.0",
+    "swagger-ui-express": "^4.1.6",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "swagger-autogen": "^2.8.1"
   }
 }
