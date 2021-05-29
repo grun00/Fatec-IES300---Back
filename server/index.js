@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-
-const playersRouter = require("../routes/players-routes");
+const http = require('http');
+const {createSocket} = require("../services/socket/socketConfig")
+const playersRouter = require("../routes/players-routes") 
 const questionsRouter = require("../routes/questions-routes") ;
 const itemsRouter = require('../routes/items-router')
 
@@ -16,6 +17,13 @@ app.use((req, res, next) => {
      next()
 })
 
+server = http.createServer(app)
+
+createSocket(server)
+
+
+
+
 // Routes
 app.use("/players", playersRouter);
 
@@ -27,6 +35,6 @@ app.use("/items", itemsRouter);
 //     res.send(JSON.stringify({ message: 'server online' }))
 // })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`)
 })
