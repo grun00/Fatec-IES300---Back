@@ -18,7 +18,6 @@ exports.listQuestions = async (req, res) => {
     }
 }
 
-
 exports.findOneQuestionByID = async (req, res) => {
     const {id} = req.params
     try {

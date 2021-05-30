@@ -3,7 +3,12 @@ const cors = require('cors');
 
 const swaggerRouter = require("../routes/swagger-routes");
 const playersRouter = require("../routes/players-routes");
+
+const http = require('http');
+const {createSocket} = require("../services/socket/socketConfig")
+
 const questionsRouter = require("../routes/questions-routes") ;
+const itemsRouter = require('../routes/items-router')
 
 const app = express();
 const PORT = 5000;
@@ -16,16 +21,24 @@ app.use((req, res, next) => {
      next()
 })
 
+server = http.createServer(app)
+
+createSocket(server)
+
+
+
+
 // Routes
 app.use("/players", playersRouter);
 app.use("/docs", swaggerRouter)
 app.use("/questions", questionsRouter);
 
+app.use("/items", itemsRouter);
 
 // app.get('/', (req, res) => {
 //     res.send(JSON.stringify({ message: 'server online' }))
 // })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`)
 })

@@ -67,7 +67,16 @@ Método: POST
 
 Endereço do serviço: http://localhost:5000/players
 
-Exemplo de json: {"name":"Thiago","netWorth":"300000000","email":"thiago@gmail.com","password":"123456"}
+Exemplo de json: {"name":"Thiago","netWorth":"300000000","email":"thiago@gmail.com","password":"123456","items":[{"item_id":"609ead9f9fc12b2ee4553792","quantidade":1}, {"item_id":"609eada79fc12b2ee4553793","quantidade":2}] , "vitorias":2}
+
+                                    Deletar player 
+
+Passar o ID do player
+
+Método: DELETE
+
+Exemplo: http://localhost:5000/players/60a6ae01ba107433dcfbd788
+
 
 
 
