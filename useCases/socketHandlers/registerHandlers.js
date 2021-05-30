@@ -20,4 +20,7 @@ module.exports= (socketServer) => {
 
     // Match handlers
     socketServer.socket.on("canWeStart", () => matchHandler.canStart(socketServer));
+    socketServer.socket.on("recordAnswer", matchData => matchHandler.recordAnswer(socketServer, matchData))
+    socketServer.socket.on("timeUp", data => matchHandler.timeUp(socketServer, data))
+
 }

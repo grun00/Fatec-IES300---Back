@@ -5,9 +5,10 @@ const createRoom = async (socketServer, roomName) => {
     console.log(`${roomName} already exists.`);
     return false;
   }
-  socketServer.info.channels[roomName] = {}
+  socketServer.info.channels[roomName] = {};
   socketServer.info.channels[roomName].players = [socketServer.socket.player];
   socketServer.info.channels[roomName].questions = await prepareMatch('devDatabase', 'questions', 5);
+  socketServer.info.channels[roomName].matchData = {};
   socketServer.socket.currentRoom = roomName;
   socketServer.socket.join(roomName);
   console.log(`Room ${roomName} created`, socketServer.info.channels);

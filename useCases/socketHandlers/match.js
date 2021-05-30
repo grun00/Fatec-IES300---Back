@@ -6,13 +6,8 @@ const collection = 'questions';
 const randomizeAlternatives = (question) => {
     if(question.alternatives && question.answer){
         const matchAlternatives = _.shuffle([...question.alternatives, question.answer]);
-        const answerIndex = [];
-        matchAlternatives.forEach((element, index) => {
-            if(element === question.answer) { 
-                answerIndex.push(index)
-            }
-        });
-        return {matchAlternatives, answerIndex: answerIndex[0]};
+        const answerIndex = matchAlternatives.indexOf(question.answer)
+        return {matchAlternatives, answerIndex: answerIndex};
     }
     return null;
 }
@@ -28,7 +23,6 @@ const prepareMatch = async (database, collection, quantity) => {
         question.randomAlternatives = matchAlternatives
         question.answerIndex = answerIndex
     }
-    console.log(questions[0])
     return questions
 }
 
@@ -45,7 +39,7 @@ const assignQuestions =  async (socketServer) => {
 
 const canStart = (socketServer) => {
     console.log(socketServer.io.of("/").adapter.rooms)
-    const roomName = socketServer.socket.roomName;
+    const roomName = socketServer.socket.currenRoom;
     if(!roomName) return false;
     
     const questions = socketServer.info.channels[roomName].questions;
@@ -74,8 +68,50 @@ const canStart = (socketServer) => {
     
 }
 
+const recordAnswer = (socketServer, data) => {
+    const {player, myChosenAlternative, questionNumber, correct, currentTime} = data
+    const roomName = socketServer.socket.currentRoom;
+    const oldData = socketServer.info.channels[roomName].matchData
+    const newData = { 
+        [player]: { 
+        [questionNumber]: {
+                myAnswer: myChosenAlternative, 
+                correct: correct,
+                points: correct ? 1 * (currentTime/20) : 0 
+            } 
+        }
+    }
+    socketServer.info.channels[roomName].matchData[player] = {...oldData[player], ...newData[player]};
+
+    socketServer.socket.emit('answerRecorded')
+    socketServer.socket.to(roomName).emit("opponentReady", true)
+    console.log(socketServer.info.channels[roomName].matchData)
+}
+
+const timeUp = (socketServer, {player, myChosenAlternative, questionNumber, correct, currentTime}=matchData) => {
+    const roomName = socketServer.socket.currentRoom;
+    console.log(roomName);
+    const oldData = socketServer.info.channels[roomName].matchData
+    const newData = { 
+        [player]: { 
+        [questionNumber]: {
+                myAnswer: myChosenAlternative, 
+                correct: correct,
+                points: 0 
+            } 
+        }
+    }
+    socketServer.info.channels[roomName].matchData[player] = {...oldData[player], ...newData[player]};
+
+    socketServer.socket.emit('answerRecorded')
+    socketServer.socket.to(roomName).emit("opponentReady", true)
+    console.log(socketServer.info.channels[roomName].matchData)
+}
+
 module.exports = {
     assignQuestions,
     prepareMatch,
     canStart,
+    recordAnswer,
+    timeUp
 }
