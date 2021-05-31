@@ -43,7 +43,7 @@ const canStart = (socketServer) => {
     if(!roomName) return false;
     
     const questions = socketServer.info.channels[roomName].questions;
-    const playerCount = socketServer.info.channels[roomName].players.legnth;
+    const playerCount = socketServer.info.channels[roomName].players.length;
      
     if(!Object.keys(socketServer.info.channels).includes(roomName)){
         console.log(`canStart Match Error: ${roomName} doesn't exist.`)

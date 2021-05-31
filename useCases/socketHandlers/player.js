@@ -12,18 +12,18 @@ const getServerInfo = (socketServer) => {
 
 const newPlayer = (socketServer, player) => {
         // Register player information onto the socket
-        socketServer.info.onlinePlayers[player.name] = {...player, socketId: socketServer.socket.id};
-        socketServer.socket.name = player.name;
+        socketServer.info.onlinePlayers[player.username] = {...player, socketId: socketServer.socket.id};
+        socketServer.socket.username = player.username;
         socketServer.socket.player = player;
         // Force player to join the General room (for testing)
         // Alert all users that a new player as joined
-        socketServer.io.emit("playerCreated", `${player.name} created.`);
+        socketServer.io.emit("playerCreated", `${player.username} created.`);
         socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers);
     return socketServer.info.onlinePlayers
 }
 
 const disconnect = (socketServer) => {
-        if(!socketServer.info.onlinePlayers[socketServer.socket.name]) {
+        if(!socketServer.info.onlinePlayers[socketServer.socket.username]) {
             console.log("Player doesn't exist")
             return false;
         } 
@@ -33,8 +33,8 @@ const disconnect = (socketServer) => {
             console.log(error)
             return false;
         }
-        delete socketServer.info.onlinePlayers[socketServer.socket.name];
-        console.log(`${socketServer.socket.name} has disconnected.`)
+        delete socketServer.info.onlinePlayers[socketServer.socket.username];
+        console.log(`${socketServer.socket.username} has disconnected.`)
         socketServer.io.emit('getOnlinePlayers', socketServer.info.onlinePlayers)
         return true;
 }

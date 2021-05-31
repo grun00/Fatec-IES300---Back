@@ -44,7 +44,7 @@ const leaveRoom = (socketServer, leaveAll = false) => {
     }
   }
   socketServer.socket.emit("leftRoom", socketServer.info.channels);
-  console.log(`${socketServer.socket.name} has left ${roomName}`);
+  console.log(`${socketServer.socket.username} has left ${roomName}`);
   console.log("leftRoom", socketServer.info.channels);
   if(socketServer.info.channels[roomName].players.length === 0 ){
     console.log("Deleting Room")
@@ -75,7 +75,7 @@ const joinRoom = (socketServer, roomName) => {
   socketServer.socket.currentRoom = roomName;
   socketServer.socket.to(roomName).emit("Here")
   socketServer.socket.emit("joinedRoom", socketServer.info.channels);
-  console.log(`${socketServer.socket.name} joined ${roomName}`);
+  console.log(`${socketServer.socket.username} joined ${roomName}`);
   return true;
 };
 
