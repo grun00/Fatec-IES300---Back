@@ -58,9 +58,9 @@ const leaveRoom = (socketServer, leaveAll = false) => {
   return true;
 };
 
-const joinRoom = (socketServer, roomName) => {
-  if (!Object.keys(socketServer.info.channels).includes(roomName)) {
-    console.log(`Join Error: ${roomName} doesn't exist.`);
+const joinRoom = (socketServer, roomInfo) => {
+  if (!Object.keys(socketServer.info.channels).includes(roomInfo.roomName)) {
+    console.log(`Join Error: ${roomInfo.roomName} doesn't exist.`);
     return false;
   }
   if (socketServer.socket.currentRoom !== "General") {
@@ -71,12 +71,15 @@ const joinRoom = (socketServer, roomName) => {
       return false;
     }
   }
-  socketServer.socket.join(roomName);
-  socketServer.info.channels[roomName].players.push(socketServer.socket.player);
-  socketServer.socket.currentRoom = roomName;
-  socketServer.socket.to(roomName).emit("Here")
+
+
+  socketServer.socket.join(roomInfo.roomName);
+  socketServer.info.channels[roomInfo.roomName].players.push(socketServer.socket.player);
+  socketServer.socket.currentRoom = roomInfo.roomName;
+  socketServer.socket.to(roomInfo.roomName).emit("Here")
   socketServer.socket.emit("joinedRoom", socketServer.info.channels);
-  console.log(`${socketServer.socket.name} joined ${roomName}`);
+  console.log(`${socketServer.socket.name} joined ${roomInfo.roomName}`);
+
   return true;
 };
 
