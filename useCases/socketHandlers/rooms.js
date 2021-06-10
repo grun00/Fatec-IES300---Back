@@ -1,17 +1,18 @@
 const { prepareMatch } = require("./match")
 
-const createRoom = async (socketServer, roomName) => {
-  if (Object.keys(socketServer.info.channels).includes(roomName)) {
-    console.log(`${roomName} already exists.`);
+const createRoom = async (socketServer, roomInfo) => {
+  if (Object.keys(socketServer.info.channels).includes(roomInfo.roomName)) {
+    console.log(`${roomInfo.roomName} already exists.`);
     return false;
   }
-  socketServer.info.channels[roomName] = {};
-  socketServer.info.channels[roomName].players = [socketServer.socket.player];
-  socketServer.info.channels[roomName].questions = await prepareMatch('devDatabase', 'questions', 5);
-  socketServer.info.channels[roomName].matchData = {};
-  socketServer.socket.currentRoom = roomName;
-  socketServer.socket.join(roomName);
-  console.log(`Room ${roomName} created`, socketServer.info.channels);
+  socketServer.info.channels[roomInfo.roomName] = {};
+  socketServer.info.channels[roomInfo.roomName].players = [socketServer.socket.player];
+  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5);
+  socketServer.info.channels[roomInfo.roomName].matchData = {};
+  socketServer.info.channels[roomInfo.roomName].password = roomInfo.roomPwd;
+  socketServer.socket.currentRoom = roomInfo.roomName;
+  socketServer.socket.join(roomInfo.roomName);
+  console.log(`Room ${roomInfo.roomName} created`, socketServer.info.channels);
   socketServer.io.emit("roomCreated", socketServer.info.channels);
   return true;
 };
