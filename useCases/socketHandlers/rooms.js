@@ -72,6 +72,10 @@ const joinRoom = (socketServer, roomInfo) => {
     }
   }
 
+  if (roomInfo.roomPwd !== socketServer.info.channels[roomInfo.roomName].password) {
+    console.log('wrong pwd');
+    return false;
+  }
 
   socketServer.socket.join(roomInfo.roomName);
   socketServer.info.channels[roomInfo.roomName].players.push(socketServer.socket.player);
