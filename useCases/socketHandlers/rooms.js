@@ -7,7 +7,7 @@ const createRoom = async (socketServer, roomInfo) => {
   }
   socketServer.info.channels[roomInfo.roomName] = {};
   socketServer.info.channels[roomInfo.roomName].players = [socketServer.socket.player];
-  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5);
+  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5, roomInfo.roomTheme);
   socketServer.info.channels[roomInfo.roomName].matchData = {};
   socketServer.info.channels[roomInfo.roomName].password = roomInfo.roomPwd;
   socketServer.socket.currentRoom = roomInfo.roomName;
