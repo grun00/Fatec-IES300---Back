@@ -29,5 +29,4 @@ router.patch("/add_money/:id", playersController.addMoney)
 // Buy Items with Plauer_id
 router.patch("/:id/buy_items", playersController.buyItems)
 
-
 module.exports = router
