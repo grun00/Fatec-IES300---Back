@@ -1,0 +1,316 @@
+openapi: 3.0.3
+info:
+  title: Show do Vitão
+  description: Documentação da API do jogo Show do Vitão.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+paths:
+  /players:
+    get:
+      tags:
+        - players
+      summary: Retorna uma lista com Players cadastrados.
+      responses:
+        '200':
+          description: um JSON com todos os Players.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+              example:
+                - _id: 504a918c2t2f9555bf238cc1
+                  name: Vitão
+                  netWorth: '399000000'
+                  email: vitao@show.com
+                  password: '231WtKasgd#1'
+                - _id: 604a818c2b2f9555bi223cc1
+                  name: Silvio Santos
+                  netWorth: '80000000'
+                  email: silvio@abrav.com
+                  password: '2k44lWtKas'
+                  backpack: 
+                    items:
+                      item_id: "609eadb69fc12b2ee4553795"
+                      quantity: 5
+    post:
+      tags:
+        - players
+      summary: Cria um Player. 
+      parameters:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/PlayerUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+              $ref: '#/components/schemas/ApiResponse'
+              example: 
+                oneOf:
+                  - message: "Document Updated"
+
+  /players/{_id}:
+    get:
+      tags:
+        - players
+      summary: Retorna um único Player utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única do Player.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+    patch:
+      tags:
+        - players
+      summary: Atualiza um único Player utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única do Player.
+          schema:
+            type: string
+            minimum: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/PlayerUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+    delete:
+      tags:
+        - players
+      summary: Deleta um único Player utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única do Player.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /players/username/{name}:
+    get:
+      summary: Retorna um único Player utilizando o name.
+      tags:
+        - players
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: nome do Player.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+
+  /questions:
+    get:
+      summary: Retorna a uma lista de Questions cadastradas.
+      tags:
+        - questions 
+      responses:
+        '200': 
+          description: um JSON com todas as Question cadastradas.
+          content:
+            applications/json:
+              schema:
+                $ref: '#/components/schemas/Question' 
+    post:
+      tags: 
+        - questions
+      summary: Cria uma Question.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionUpdate'
+
+  /questions/{_id}:
+    get:
+      tags:
+        - questions 
+      summary: Retorna uma única Question utilizando _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+    patch:
+      tags:
+        - questions
+      summary: Atualiza uma única Question utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/QuestionUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+    delete:
+      tags:
+        - questions 
+      summary: Deleta uma única Question utilizando o _id.
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: identificação única da Question.
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        message: 
+          type: string
+    Player:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        netWorth:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        money:
+          type: integer
+        backpack:
+          type: array
+          items:
+            type: object
+            properties:
+              item_id:
+                type: string
+              quantity:
+                type: integer
+    PlayerUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        netWorth:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        money:
+          type: integer
+        backpack:
+          type: array
+          items:
+            type: object
+            properties:
+              item_id:
+                type: string
+              quantity:
+                type: integer
+    Question:
+      type: object
+      properties:
+       _id:
+        type: string
+       question:
+        type: string
+       alternatives:
+        type: array
+        items:
+          type: string
+        minItems: 4
+        maxItems: 4
+       answer: 
+        type: string
+       category:
+        type: string
+       difficulty:
+        type: integer
+    QuestionUpdate:
+      type: object
+      properties:
+       question:
+        type: string
+       alternatives:
+        type: array
+        items:
+          type: string
+        minItems: 4
+        maxItems: 4
+       answer: 
+        type: string
+       category:
+        type: string
+       difficulty:
+        type: integer
+
