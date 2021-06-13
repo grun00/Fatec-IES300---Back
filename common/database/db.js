@@ -19,13 +19,13 @@ const listAll = async (database, collection) => {
         client = await getConnection(uri)
         const cursor = await client.db(database).collection(collection);
         result = await cursor.find({}).toArray()
-        
+
     } catch (error) {
         console.log(`Error: ${error}`)
         result = error
-         
+
     } finally {
-        
+
         client ? client.close() : null
         return result
     }
@@ -45,13 +45,13 @@ const updateOne = async (database, collection, query, data) => {
         console.log(`Error: ${error.message}`)
        result = {
            message: "Update failed",
-           error: error.message 
+           error: error.message
         }
     } finally {
         client ? client.close() : null
         return result
     }
-} 
+}
 
 // Deletes a Document filtered by a Query Argument
 const deleteOne = async (database, collection, query) => {
@@ -134,13 +134,13 @@ const findRandom = async (database, collection, difficulty, quantity, category) 
     let client;
     let result;
     try {
-        
+
         client = await getConnection(uri)
         cursor = await client.db(database).collection(collection);
 
         let query = { "difficulty": difficulty , "category": category}
 
-        if( category == null)
+        if( category == '')
             delete query.category
 
         result = await cursor.aggregate( [ { $match: query },{$sample: {size:parseInt(quantity,10)}}]).toArray()
@@ -155,12 +155,12 @@ const findRandom = async (database, collection, difficulty, quantity, category) 
     }
 
 
-    
+
 }
 
 
 module.exports = {
-    listAll, 
+    listAll,
     updateOne,
     deleteOne,
     findOne,
