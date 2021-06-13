@@ -1,17 +1,18 @@
 const { prepareMatch } = require("./match")
 
-const createRoom = async (socketServer, roomName) => {
-  if (Object.keys(socketServer.info.channels).includes(roomName)) {
-    console.log(`${roomName} already exists.`);
+const createRoom = async (socketServer, roomInfo) => {
+  if (Object.keys(socketServer.info.channels).includes(roomInfo.roomName)) {
+    console.log(`${roomInfo.roomName} already exists.`);
     return false;
   }
-  socketServer.info.channels[roomName] = {};
-  socketServer.info.channels[roomName].players = [socketServer.socket.player];
-  socketServer.info.channels[roomName].questions = await prepareMatch('devDatabase', 'questions', 5);
-  socketServer.info.channels[roomName].matchData = {};
-  socketServer.socket.currentRoom = roomName;
-  socketServer.socket.join(roomName);
-  console.log(`Room ${roomName} created`, socketServer.info.channels);
+  socketServer.info.channels[roomInfo.roomName] = {};
+  socketServer.info.channels[roomInfo.roomName].players = [socketServer.socket.player];
+  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5, roomInfo.roomTheme);
+  socketServer.info.channels[roomInfo.roomName].matchData = {};
+  socketServer.info.channels[roomInfo.roomName].password = roomInfo.roomPwd;
+  socketServer.socket.currentRoom = roomInfo.roomName;
+  socketServer.socket.join(roomInfo.roomName);
+  console.log(`Room ${roomInfo.roomName} created`, socketServer.info.channels);
   socketServer.io.emit("roomCreated", socketServer.info.channels);
   return true;
 };
@@ -57,9 +58,9 @@ const leaveRoom = (socketServer, leaveAll = false) => {
   return true;
 };
 
-const joinRoom = (socketServer, roomName) => {
-  if (!Object.keys(socketServer.info.channels).includes(roomName)) {
-    console.log(`Join Error: ${roomName} doesn't exist.`);
+const joinRoom = (socketServer, roomInfo) => {
+  if (!Object.keys(socketServer.info.channels).includes(roomInfo.roomName)) {
+    console.log(`Join Error: ${roomInfo.roomName} doesn't exist.`);
     return false;
   }
   if (socketServer.socket.currentRoom !== "General") {
@@ -70,12 +71,19 @@ const joinRoom = (socketServer, roomName) => {
       return false;
     }
   }
-  socketServer.socket.join(roomName);
-  socketServer.info.channels[roomName].players.push(socketServer.socket.player);
-  socketServer.socket.currentRoom = roomName;
-  socketServer.socket.to(roomName).emit("Here")
+
+  if (roomInfo.roomPwd !== socketServer.info.channels[roomInfo.roomName].password) {
+    console.log('wrong pwd');
+    return false;
+  }
+
+  socketServer.socket.join(roomInfo.roomName);
+  socketServer.info.channels[roomInfo.roomName].players.push(socketServer.socket.player);
+  socketServer.socket.currentRoom = roomInfo.roomName;
+  socketServer.socket.to(roomInfo.roomName).emit("Here")
   socketServer.socket.emit("joinedRoom", socketServer.info.channels);
-  console.log(`${socketServer.socket.username} joined ${roomName}`);
+  console.log(`${socketServer.socket.username} joined ${roomInfo.roomName}`);
+
   return true;
 };
 
