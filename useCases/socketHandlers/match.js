@@ -108,6 +108,14 @@ const timeUp = (socketServer, {player, myChosenAlternative, questionNumber, corr
     console.log(socketServer.info.channels[roomName].matchData)
 }
 
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+}
+
 module.exports = {
     assignQuestions,
     prepareMatch,
