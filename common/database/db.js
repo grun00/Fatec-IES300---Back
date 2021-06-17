@@ -138,13 +138,17 @@ const findRandom = async (database, collection, difficulty, quantity, category) 
         client = await getConnection(uri)
         cursor = await client.db(database).collection(collection);
 
-        let query = { "difficulty": difficulty , "category": category}
-
         if( category == '')
             delete query.category
 
-        result = await cursor.aggregate( [ { $match: query },{$sample: {size:parseInt(quantity,10)}}]).toArray()
+      result = await cursor.aggregate(
+        [
+          {$match: { "difficulty": difficulty, "category": { $in: category }}},
+          {$sample: {size:parseInt(quantity,10)}}
+        ]
+      ).toArray()
 
+      console.log(result)
     } catch (error) {
         console.log(`Error: ${error.message}`)
         result = {message: "Operation failed",
