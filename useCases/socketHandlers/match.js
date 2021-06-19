@@ -12,11 +12,11 @@ const randomizeAlternatives = (question) => {
     return null;
 }
 
-const prepareMatch = async (database, collection, quantity, theme) => {
-    const lvl1 = await findRandom(database, collection, 1, quantity, theme)
-    const lvl2 = await findRandom(database, collection, 2, quantity, theme)
-    const lvl3 = await findRandom(database, collection, 3, quantity, theme)
-    const lvl4 = await findRandom(database, collection, 4, 1, theme)
+const prepareMatch = async (database, collection, quantity, themes) => {
+    const lvl1 = await findRandom(database, collection, 1, quantity, themes)
+    const lvl2 = await findRandom(database, collection, 2, quantity, themes)
+    const lvl3 = await findRandom(database, collection, 3, quantity, themes)
+    const lvl4 = await findRandom(database, collection, 4, 1, themes)
     const questions = [...lvl1, ...lvl2, ...lvl3, ...lvl4]
     for(let question of questions){
          const {matchAlternatives, answerIndex} = randomizeAlternatives(question)
@@ -112,6 +112,14 @@ const skipQuestion = (socketServer) => {
     const roomName = socketServer.socket.currentRoom;
     socketServer.socket.to(roomName).emit('opponentSkipped');
     socketServer.socket.emit("questionSkipped");
+}
+
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
 }
 
 module.exports = {
