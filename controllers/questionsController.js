@@ -33,11 +33,11 @@ exports.findOneQuestionByID = async (req, res) => {
 exports.findQuestionMatch = async (req, res) => {
     try {
 
-        const nivel1 = await findRandom(req.database, collection, 1, req.query.nivel1, null)
-        const nivel2 = await findRandom(req.database, collection, 2, req.query.nivel2, null)
-        const nivel3 = await findRandom(req.database, collection, 3, req.query.nivel3, null)
-        const nivel4 = await findRandom(req.database, collection, 4, req.query.nivel4, null)
-        
+        const nivel1 = await findRandom(req.database, collection, 0, req.query.nivel1, null)
+        const nivel2 = await findRandom(req.database, collection, 1, req.query.nivel2, null)
+        const nivel3 = await findRandom(req.database, collection, 2, req.query.nivel3, null)
+        const nivel4 = await findRandom(req.database, collection, 3, req.query.nivel4, null)
+
         const result = nivel1.concat(nivel2).concat(nivel3).concat(nivel4)
         res.send(result)
     } catch (error) {
@@ -66,7 +66,7 @@ exports.updateQuestionById = async (req, res) => {
     const {id} = req.params
     const data = req.body
     try {
-        const result = await updateOne(req.database, collection, {_id: ObjectID(id)}, data) 
+        const result = await updateOne(req.database, collection, {_id: ObjectID(id)}, data)
         res.send(result)
     } catch (error) {
         res.status(400).send({ message: error.message })
