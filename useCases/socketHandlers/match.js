@@ -69,15 +69,17 @@ const canStart = (socketServer) => {
 }
 
 const recordAnswer = (socketServer, data) => {
-    const {player, myChosenAlternative, questionNumber, correct, currentTime} = data
+    const {player, myChosenAlternative, questionNumber, correct, currentTime, points} = data
     const roomName = socketServer.socket.currentRoom;
     const oldData = socketServer.info.channels[roomName].matchData
+    
     const newData = {
         [player]: {
         [questionNumber]: {
                 myAnswer: myChosenAlternative,
                 correct: correct,
-                points: correct ? 1 * (currentTime/20) : 0
+                points: /*correct ? 1 **/ points /*(currentTime/20) : 0*/,
+                player: player
             }
         }
     }
@@ -97,7 +99,8 @@ const timeUp = (socketServer, {player, myChosenAlternative, questionNumber, corr
         [questionNumber]: {
                 myAnswer: myChosenAlternative,
                 correct: correct,
-                points: 0
+                points: 0,
+                player: player
             }
         }
     }
