@@ -5,9 +5,13 @@ const createRoom = async (socketServer, roomInfo) => {
     console.log(`${roomInfo.roomName} already exists.`);
     return false;
   }
+
+  let themes = ['Atualidades', 'TI', 'Conhecimentos Gerais', 'Entretenimento' ];
+  removeItemOnce(themes, roomInfo.roomTheme);
+
   socketServer.info.channels[roomInfo.roomName] = {};
   socketServer.info.channels[roomInfo.roomName].players = [socketServer.socket.player];
-  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5, roomInfo.roomTheme);
+  socketServer.info.channels[roomInfo.roomName].questions = await prepareMatch('devDatabase', 'questions', 5, themes);
   socketServer.info.channels[roomInfo.roomName].matchData = {};
   socketServer.info.channels[roomInfo.roomName].password = roomInfo.roomPwd;
   socketServer.socket.currentRoom = roomInfo.roomName;
@@ -106,6 +110,14 @@ const getRoomInfo = (socketServer) => {
     const match =  socketServer.info.channels[roomName].matchData
     socketServer.io.to(roomName).emit("roomInfo", {roomName, players, playerCount, questions, match})
     return true;
+}
+
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
 }
 
 module.exports = {
