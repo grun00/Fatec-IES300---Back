@@ -87,9 +87,9 @@ const recordAnswer = (socketServer, data) => {
     }
     socketServer.info.channels[roomName].matchData[player] = {...oldData[player], ...newData[player]};
 
-    socketServer.socket.emit('answerRecorded')
-    socketServer.socket.to(roomName).emit("opponentReady", true)
-    console.log(socketServer.info.channels[roomName].matchData)
+    socketServer.socket.emit('answerRecorded');
+    socketServer.socket.to(roomName).emit("opponentReady", true);
+    console.log(socketServer.info.channels[roomName].matchData);
 }
 
 const timeUp = (socketServer, {player, myChosenAlternative, questionNumber, correct, currentTime}=matchData) => {
@@ -108,9 +108,15 @@ const timeUp = (socketServer, {player, myChosenAlternative, questionNumber, corr
     }
     socketServer.info.channels[roomName].matchData[player] = {...oldData[player], ...newData[player]};
 
-    socketServer.socket.emit('answerRecorded')
-    socketServer.socket.to(roomName).emit("opponentReady", true)
-    console.log(socketServer.info.channels[roomName].matchData)
+    socketServer.socket.emit('answerRecorded');
+    socketServer.socket.to(roomName).emit("opponentReady", true);
+    console.log(socketServer.info.channels[roomName].matchData);
+}
+
+const skipQuestion = (socketServer) => {
+    const roomName = socketServer.socket.currentRoom;
+    socketServer.socket.to(roomName).emit('opponentSkipped');
+    socketServer.socket.emit("questionSkipped");
 }
 
 function removeItemOnce(arr, value) {
@@ -126,5 +132,6 @@ module.exports = {
     prepareMatch,
     canStart,
     recordAnswer,
+    skipQuestion,
     timeUp
 }
