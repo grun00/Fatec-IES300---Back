@@ -13,10 +13,10 @@ const randomizeAlternatives = (question) => {
 }
 
 const prepareMatch = async (database, collection, quantity, themes) => {
-    const lvl1 = await findRandom(database, collection, 1, quantity, themes)
-    const lvl2 = await findRandom(database, collection, 2, quantity, themes)
-    const lvl3 = await findRandom(database, collection, 3, quantity, themes)
-    const lvl4 = await findRandom(database, collection, 4, 1, themes)
+    const lvl1 = await findRandom(database, collection, 0, 6, themes)
+    const lvl2 = await findRandom(database, collection, 1, quantity, themes)
+    const lvl3 = await findRandom(database, collection, 2, quantity, themes)
+    const lvl4 = await findRandom(database, collection, 3, 1, themes)
     const questions = [...lvl1, ...lvl2, ...lvl3, ...lvl4]
     for(let question of questions){
          const {matchAlternatives, answerIndex} = randomizeAlternatives(question)
