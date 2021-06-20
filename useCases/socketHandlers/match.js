@@ -132,5 +132,6 @@ module.exports = {
     prepareMatch,
     canStart,
     recordAnswer,
+    skipQuestion,
     timeUp
 }
