@@ -38,8 +38,12 @@ exports.findQuestionMatch = async (req, res) => {
         const nivel3 = await findRandom(req.database, collection, 2, req.query.nivel3, null)
         const nivel4 = await findRandom(req.database, collection, 3, req.query.nivel4, null)
 
+        
+
         const result = nivel1.concat(nivel2).concat(nivel3).concat(nivel4)
+        
         res.send(result)
+        
     } catch (error) {
         res.status(400).send({message: error.message })
     }
