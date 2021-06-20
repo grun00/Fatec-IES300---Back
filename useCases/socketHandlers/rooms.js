@@ -107,7 +107,8 @@ const getRoomInfo = (socketServer) => {
     const players = socketServer.info.channels[roomName].players
     const playerCount = players.length
     const questions = socketServer.info.channels[roomName].questions
-    socketServer.io.to(roomName).emit("roomInfo", {roomName, players, playerCount, questions})
+    const match =  socketServer.info.channels[roomName].matchData
+    socketServer.io.to(roomName).emit("roomInfo", {roomName, players, playerCount, questions, match})
     return true;
 }
 
